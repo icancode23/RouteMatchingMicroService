@@ -64,6 +64,11 @@ DATABASES = {
     }
 }
 
+### Celery Setup
+BROKER_URL = "amqp://icancode23:icancode23@localhost:5672/myvhost/"
+
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
