@@ -7,3 +7,10 @@ project = Celery('RouteMatcher')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'RouteMatcher.settings')
 project.config_from_object('django.conf:settings')
 project.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
+
+project.conf.update(
+     CELERY_ACCEPT_CONTENT = ['json'],
+     CELERY_TASK_SERIALIZER = 'json',
+     CELERY_RESULT_SERIALIZER = 'json',
+)
