@@ -66,7 +66,8 @@ DATABASES = {
 }
 
 ### Celery Setup
-BROKER_URL = "amqp://icancode23:icancode23@localhost:5672/myvhost/"
+# BROKER_URL = "amqp://icancode23:icancode23@localhost:5672/myvhost/"
+BROKER_URL = "amqp://guest:guest@localhost:5672//"
 import djcelery
 djcelery.setup_loader()
 
