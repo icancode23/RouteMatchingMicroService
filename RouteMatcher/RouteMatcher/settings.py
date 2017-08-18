@@ -70,13 +70,13 @@ BROKER_URL = "amqp://icancode23:icancode23@localhost:5672/myvhost/"
 import djcelery
 djcelery.setup_loader()
 
-BROKER_HOST = "127.0.0.1"
-BROKER_PORT = 5672 # default RabbitMQ listening port
-BROKER_USER = "icancode23"
-BROKER_PASSWORD = "icancode23"
-BROKER_VHOST = "myvhost"
-CELERY_BACKEND = "amqp" # telling Celery to report the results back to RabbitMQ
-CELERY_RESULT_DBURI = ""
+# BROKER_HOST = "127.0.0.1"
+# BROKER_PORT = 5672 # default RabbitMQ listening port
+# BROKER_USER = "icancode23"
+# BROKER_PASSWORD = "icancode23"
+# BROKER_VHOST = "myvhost"
+# CELERY_BACKEND = "amqp" # telling Celery to report the results back to RabbitMQ
+# CELERY_RESULT_DBURI = ""
 
 
 # Internationalization
