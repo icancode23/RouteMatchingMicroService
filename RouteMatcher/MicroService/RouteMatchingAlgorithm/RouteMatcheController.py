@@ -1,10 +1,14 @@
+####### Importing Basic Packages ############
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import json 
 
-cred = credentials.Certificate('service-account.json')
+########### Importing the Matching Algorithm #########
+from RouteAlgo import isRouteCompatible
 
+#################### Initialising FireBase ##################
+cred = credentials.Certificate('service-account.json')
 # Initialize the app with a service account, granting admin privileges
 app=firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://kute-ec351.firebaseio.com/'
@@ -14,6 +18,10 @@ app=firebase_admin.initialize_app(cred, {
 #################### Create references to Firebase database ##############
 friend_ref = db.reference('Friends')
 route_ref=db.reference("Routes")
+user_ref=db.reference("Users")
+
+######## End Of Firebase Initialisation
+
 user_name="Vishrut Kohli"
 user_friends=[]
 
