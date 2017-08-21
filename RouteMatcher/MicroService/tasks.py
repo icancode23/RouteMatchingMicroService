@@ -5,42 +5,6 @@ import time
 
 logger = get_task_logger(__name__)
 
-def findMatchingRoute(person_name,source_cords,destination_cords):
-	user_name=person_name
-	user_friends=[]
-
-	try:
-		import json
-		######## Querying for the list of all friends##############
-		user_friends_dict=json.dumps(friend_ref.order_by_key().equal_to(user_name).get())
-		user_friends_dict=json.loads(user_friends_dict)
-		user_friends=user_friends_dict[user_name].keys()
-		print user_friends
-		
-		################ Query For Friend routes ############
-		for friend in user_friends:
-			friend_routes={}
-			friend_routes=route_ref.order_by_key().equal_to(friend).get()
-			friend_route_list=friend_routes.values()
-
-			for route in friend_route_list:
-				route_dict=route.values()[0]
-				print route_dict["name"]
-				print "The route dict is ",route_dict
-				if(isRouteCompatible(route_dict["source_cords"],route_dict["destination_cords"],source_cords,destination_cords)):
-					print "Route Matched"+route_dict["name"]
-					print friend 
-					return friend
-
-				else:
-					continue
-
-		
-		
-	except Exception as e:
-		print "Exception in findMatchingRoute :",e
-		return None
-
 @task
 def checkPath():
 	import firebase_admin
@@ -85,7 +49,43 @@ def checkPath():
 	source_cordsy="28.619365,77.033534"
 	destination_cordsy="28.557110,77.06130"
 
-	findMatchingRoute("Vishrut Kohli",source_cordsy,destination_cordsy)
+
+
+	user_name=person_name
+	user_friends=[]
+
+	try:
+		import json
+		######## Querying for the list of all friends##############
+		user_friends_dict=json.dumps(friend_ref.order_by_key().equal_to(user_name).get())
+		user_friends_dict=json.loads(user_friends_dict)
+		user_friends=user_friends_dict[user_name].keys()
+		print user_friends
+		
+		################ Query For Friend routes ############
+		for friend in user_friends:
+			friend_routes={}
+			friend_routes=route_ref.order_by_key().equal_to(friend).get()
+			friend_route_list=friend_routes.values()
+
+			for route in friend_route_list:
+				route_dict=route.values()[0]
+				print route_dict["name"]
+				print "The route dict is ",route_dict
+				if(isRouteCompatible(route_dict["source_cords"],route_dict["destination_cords"],source_cords,destination_cords)):
+					print "Route Matched"+route_dict["name"]
+					print friend 
+					return friend
+
+				else:
+					continue
+
+		
+		
+	except Exception as e:
+		print "Exception in findMatchingRoute :",e
+		return None
+	# findMatchingRoute("Vishrut Kohli",source_cordsy,destination_cordsy)
 
 
 	######## End Of Firebase Initialisation
