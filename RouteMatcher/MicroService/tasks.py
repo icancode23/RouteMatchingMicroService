@@ -51,7 +51,7 @@ def checkPath():
 	from RouteAlgo import isRouteCompatible
 
 	#################### Initialising FireBase ##################
-	cred = credentials.Certificate("skjsk")
+	cred = credentials.Certificate(MicroService.services-account.json)
 	# Initialize the app with a service account, granting admin privileges
 	app=firebase_admin.initialize_app(cred, {
 	    'databaseURL': 'https://kute-ec351.firebaseio.com/'
