@@ -40,10 +40,10 @@ def isRouteCompatible(source_owner,destination_owner,source_rider,destination_ri
 
 	final_offset=vincenty(re_2_list[len(re_2_list)-1],matched_points[len(matched_points)-1]).miles * 1.6
 
-	# print "The initial distance is ",initial_offset
-	# print "The Final Offset is ",final_offset
-	# print len(matched_points)
-	# print "The total common path distance is :",dist,"km"
+	print "The initial distance is ",initial_offset
+	print "The Final Offset is ",final_offset
+	print len(matched_points)
+	print "The total common path distance is :",dist,"km"
 
 	if(final_offset<0.5 and initial_offset<0.5):
 		return True 
