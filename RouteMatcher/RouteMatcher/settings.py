@@ -71,6 +71,10 @@ BROKER_URL = "amqp://kute:kute@localhost:5672/kutehost"
 import djcelery
 djcelery.setup_loader()
 
+CELERY_IMPORTS = (
+    'MicroService.tasks'
+)
+
 # BROKER_HOST = "127.0.0.1"
 # BROKER_PORT = 5672 # default RabbitMQ listening port
 # BROKER_USER = "icancode23"
