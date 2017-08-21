@@ -40,7 +40,7 @@ def findMatchingRoute(person_name,source_cords,destination_cords):
 		print "Exception in findMatchingRoute :",e
 		return None
 
-@shared_task
+@task
 def checkPath():
 	import firebase_admin
 	from firebase_admin import credentials
