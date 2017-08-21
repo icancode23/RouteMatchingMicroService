@@ -72,7 +72,7 @@ def checkPath():
 				route_dict=route.values()[0]
 				print route_dict["name"]
 				print "The route dict is ",route_dict
-				if(isRouteCompatible(route_dict["source_cords"],route_dict["destination_cords"],source_cords,destination_cords)):
+				if(isRouteCompatible(route_dict["source_cords"],route_dict["destination_cords"],source_cordsy,destination_cordsy)):
 					print "Route Matched"+route_dict["name"]
 					print friend 
 					return friend
