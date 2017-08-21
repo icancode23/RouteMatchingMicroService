@@ -7,8 +7,11 @@ logger = get_task_logger(__name__)
 
 @shared_task
 def rebuild_search_index():
-     import time 
-     time.sleep(20) # mimicking a long running process
-     print('rebuilt search index')
+	print "check"
+	for i in range(20):
+		print i 
+    #import time 
+    #time.sleep(20) # mimicking a long running process
+    print('rebuilt search index')
 
-     return 42
+    return 42
