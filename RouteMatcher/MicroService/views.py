@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from MicroService.tasks import rebuild_search_index
+from MicroService.tasks import checkPath
 from django.http import HttpResponse 
-from tasks import checkPath
+
 # Create your views here.
 ## test function 
 def check(request):
