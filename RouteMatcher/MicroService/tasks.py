@@ -10,6 +10,7 @@ def findMatchingRoute(person_name,source_cords,destination_cords):
 	user_friends=[]
 
 	try:
+		import json
 		######## Querying for the list of all friends##############
 		user_friends_dict=json.dumps(friend_ref.order_by_key().equal_to(user_name).get())
 		user_friends_dict=json.loads(user_friends_dict)
