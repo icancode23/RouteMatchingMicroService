@@ -143,26 +143,47 @@ def postNotifications(owner,rider,notifType):
 	# 	'databaseURL': 'https://kute-ec351.firebaseio.com/'
 	# })
 	
-	token=getFCMToken(db,owner)
+	
 
 	head={'project_id': 'kute-ec351', 'Content-Type': 'application/json', 'Authorization': 'key=AAAAhaDytwk:APA91bGLIVdeWNocYSj_zm6dHAQ4cSmXBRR9xdolqe5ENgjbmaSRv_F2GraNpHNP-tIlvFSd5S6OuiiYqbNa0-cHfAjnEpaUjb_heDvcbW7TWrRD6kqccPALnaLsR4mkXIHHPyaOoXWe'}
 	# messagestring=raw_input("Enter the message you wish to send as notification:")
-	d={'to': token
-	, 'priority': 10,
-		"data" : {
-	      "Message" : "test",
-	      
-	      
-	    }}
-	notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
-	print notif_request.text
 
-	# if(notifType=="confirmAwait"):
-	# 	####### Send notification to the rider ############
+	if(notifType=="confirmAwait"):
+		####### Send notification to the rider ############
+		token=getFCMToken(db,rider)
+		d={'to': token, 
+			'priority': 10,
+			"data" : {
+		      "Message" : "Foundride", 
+		    }}
+		notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
+		print notif_request.text
 
-	# else if (notifType=="confirmed"):
-	# 	###### send notifications to owner and rider ############
 
+	else if (notifType=="confirmed"):
+		###### send notifications to owner and rider ############
+		##### First send to owner
+
+		token=getFCMToken(db,owner)
+		d={'to': token
+		, 'priority': 10,
+			"data" : {
+		      "Message" : "ConfirmedRide",
+		      
+		      
+		    }}
+		notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
+		
+		token=getFCMToken(db,rider)
+		d={'to': token
+		, 'priority': 10,
+			"data" : {
+		      "Message" : "ConfirmedRide",
+		      
+		      
+		    }}
+		notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
+	
 	############## End of postNotifications ###############
 
 
