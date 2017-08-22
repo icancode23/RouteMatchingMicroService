@@ -148,6 +148,7 @@ def postNotifications(owner,rider,notifType):
 ################ function to get the FCM Token from firebase given we have the user id ###########
 def getFCMToken(firebaseDbInstance,personId):
 	################ retrieve the person's token from firebase ##############
+	import json
 	user_ref=firebaseDbInstance.reference("Users")
 
 	person=json.dumps(user_ref.order_by_key().equal_to(personId).get())
