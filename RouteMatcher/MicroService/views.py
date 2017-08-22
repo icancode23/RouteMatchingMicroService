@@ -7,3 +7,13 @@ from django.http import HttpResponse
 def check(request):
 	checkPath.delay()
 	return HttpResponse("Yes this works")
+
+## Function To send notifications to clients 
+def sendNotifications(request):
+	## retrieve the get parameters
+	owner=request.GET.get("Owner")
+	rider=request.GET.get("Rider")
+	notifType=request.GET.get("notifType")
+	return HttpResponse(owner +rider + notifType)
+
+
