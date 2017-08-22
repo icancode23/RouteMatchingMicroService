@@ -4,6 +4,9 @@ from celery.utils.log import get_task_logger
 import time
 
 logger = get_task_logger(__name__)
+app=firebase_admin.initialize_app(cred, {
+		'databaseURL': 'https://kute-ec351.firebaseio.com/'
+	})
 
 ########################## Task to check whether the two routes are compatible or not  ######################
 @task
@@ -118,9 +121,9 @@ def postNotifications(owner,rider,notifType):
 	#################### Initialising FireBase ##################
 	cred = credentials.Certificate(c)
 	# Initialize the app with a service account, granting admin privileges
-	app=firebase_admin.initialize_app(cred, {
-		'databaseURL': 'https://kute-ec351.firebaseio.com/'
-	})
+	# app=firebase_admin.initialize_app(cred, {
+	# 	'databaseURL': 'https://kute-ec351.firebaseio.com/'
+	# })
 	
 	token=getFCMToken(db,owner)
 
