@@ -160,7 +160,7 @@ def postNotifications(owner,rider,notifType):
 		print notif_request.text
 
 
-	else if (notifType=="confirmed"):
+	elif (notifType=="confirmed"):
 		###### send notifications to owner and rider ############
 		##### First send to owner
 
