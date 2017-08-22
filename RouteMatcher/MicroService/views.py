@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from MicroService.tasks import checkPath
+from MicroService.tasks import checkPath,postNotifications
 from django.http import HttpResponse 
 
 # Create your views here.
@@ -14,6 +14,10 @@ def sendNotifications(request):
 	owner=request.GET.get("Owner")
 	rider=request.GET.get("Rider")
 	notifType=request.GET.get("notifType")
-	return HttpResponse(owner +rider + notifType)
+	
+	############# invoke celery task to send out notifications ##########
+	postNotifications.delay(owner,rider,notifType)
+
+	return HttpResponse("{Status:OK}")
 
 
