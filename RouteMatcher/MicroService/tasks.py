@@ -28,7 +28,7 @@ app=firebase_admin.initialize_app(cred, {
 
 ########################## Task to check whether the two routes are compatible or not  ######################
 @task
-def checkPath(owner,rider,initiator):
+def checkPath(person_id,initiator):
 	import firebase_admin
 	from firebase_admin import credentials
 	from firebase_admin import db
@@ -39,16 +39,16 @@ def checkPath(owner,rider,initiator):
 
 	# As an admin, the app has access to read and write all data, regradless of Security Rules
 	if(initiator=="owner"):
-		matchTripOwner(db,owner,rider,isRouteCompatible)
+		matchTripOwner(db,person_id,isRouteCompatible)
 
 	elif(initiator=="rider"):
-		matchTripRider(db,isRouteCompatible)
+		matchTripRider(db,person_id,isRouteCompatible)
 
 	####################### End of CheckPath #################
 
 
 ########################### Function to match trips if the initiator is the owner itself ###############
-def matchTripOwner(db,owner,rider,isRouteCompatible):	
+def matchTripOwner(db,person_id,isRouteCompatible):	
 
 	friend_ref = db.reference('Friends')
 	route_ref=db.reference("Routes")
@@ -57,24 +57,18 @@ def matchTripOwner(db,owner,rider,isRouteCompatible):
 	temp_trip_ref=db.reference("Temporarytrips")
 
 	########## Get owners name to explore the friend node ########
-	person=json.dumps(user_ref.order_by_key().equal_to(rider).get())
+	person=json.dumps(user_ref.order_by_key().equal_to(person_id).get())
 	person=json.loads(person)
 	owner_name=person.values()[0]["name"]
 
 	########### Get the owners trip ################
 	######## currently we are simply querying the trip node with person name later we will have the trip id as well #############
-	self_trip=json.dumps(trip_ref.order_by_key().equal_to(owner).get())
+	self_trip=json.dumps(trip_ref.order_by_key().equal_to(person_id).get())
 	self_trip=json.loads(self_trip)
 	owner_source_cords=self_trip.values()[0]["source_cords"]
 	owner_destination_cords=self_trip.values()[0]["destination_cords"]
-
-
 	
-	##print person_name
-	#source_cordsy="28.619365,77.033534"
-	#destination_cordsy="28.557110,77.06130"
-	
-	user_name=person_name
+	user_name=owner_name
 	user_friends=[]
 
 	try:
@@ -85,16 +79,28 @@ def matchTripOwner(db,owner,rider,isRouteCompatible):
 		user_friends=user_friends_dict[user_name].keys()
 		##print user_friends
 		for friend in user_friends:
-			friend_trips={}
-			friend_trips=temp_trip_ref.order_by_key().equal_to(friend).get()
-			################ query for single friend trips ###############
-			print friend_trips
-			#friend_trips_list=friend_trips.values()
-		
-			
+			friend_trip={}
+			friend_trip=temp_trip_ref.child(friend).get()
+			################ Check whether the trip matches or not ##############
+			if(isRouteCompatible(owner_source_cords,owner_destination_cords,friend_trip["source_cords"],friend_trip["destination_cords"])):
+				######### Match Found Indicate the owner who was the initiatior ########################
+				### Code snippet to send Notifications
+				import requests
+				head={'project_id': 'kute-ec351', 'Content-Type': 'application/json', 'Authorization': 'key=AAAAhaDytwk:APA91bGLIVdeWNocYSj_zm6dHAQ4cSmXBRR9xdolqe5ENgjbmaSRv_F2GraNpHNP-tIlvFSd5S6OuiiYqbNa0-cHfAjnEpaUjb_heDvcbW7TWrRD6kqccPALnaLsR4mkXIHHPyaOoXWe'}
+				token_owner=getFCMData(db,person_id)[0]
+				d={'to': token_owner, 
+				'priority': 10,
+				"data" : {
+			      "Message" : "FoundRide",
+			      "Name" : getFCMData(db,friend)[1],
+			      "Owner" : person_id,
+			      "Rider" : friend 
 
-		
-		################ Query For Friend Multiple trips ############
+			    }}
+				notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
+				print notif_request.text	
+
+		################ Query For Friend Multiple trips or routes ############
 		
 
 		# 	for route in friend_route_list:
@@ -117,25 +123,27 @@ def matchTripOwner(db,owner,rider,isRouteCompatible):
 
 
 ########################### Function to match trips if the initiator is the owner itself ###############
-def matchTripRider(db,owner,rider,isRouteCompatible):
+def matchTripRider(db,person_id,isRouteCompatible):
 
 	friend_ref = db.reference('Friends')
 	route_ref=db.reference("Routes")
 	user_ref=db.reference("Users")
+	trip_ref=db.reference("Trips")
+	temp_trip_ref=db.reference("Temporarytrips")
 
-	## get person name
-	## We will get the person id dynamically 
-	## dynamically person_id
-	person=json.dumps(user_ref.order_by_key().equal_to(rider).get())
+	########## Get owners name to explore the friend node ########
+	person=json.dumps(user_ref.order_by_key().equal_to(person_id).get())
 	person=json.loads(person)
-	owner_name=person.values()[0]["name"]
-	##print person_name
-	#source_cordsy="28.619365,77.033534"
-	#destination_cordsy="28.557110,77.06130"
+	rider_name=person.values()[0]["name"]
 
-
-
-	user_name=person_name
+	########### Get the owners trip ################
+	######## currently we are simply querying the trip node with person name later we will have the trip id as well #############
+	self_trip=json.dumps(temp_trip_ref.order_by_key().equal_to(person_id).get())
+	self_trip=json.loads(self_trip)
+	self_source_cords=self_trip.values()[0]["source_cords"]
+	self_destination_cords=self_trip.values()[0]["destination_cords"]
+	
+	user_name=rider_name
 	user_friends=[]
 
 	try:
@@ -145,30 +153,34 @@ def matchTripRider(db,owner,rider,isRouteCompatible):
 		user_friends_dict=json.loads(user_friends_dict)
 		user_friends=user_friends_dict[user_name].keys()
 		##print user_friends
-		
-		################ Query For Friend routes ############
 		for friend in user_friends:
-			friend_routes={}
-			friend_routes=route_ref.order_by_key().equal_to(friend).get()
-			friend_route_list=friend_routes.values()
+			friend_trip={}
+			friend_trip=trip_ref.child(friend).get()
+			################ Check whether the trip matches or not ##############
+			if(isRouteCompatible(friend_trip["source_cords"],friend_trip["destination_cords"],self_source_cords,self_destination_cords)):
+				######### Match Found Indicate the owner with whom we we found a match ########################
+				### Code snippet to send Notifications
+				import requests
+				head={'project_id': 'kute-ec351', 'Content-Type': 'application/json', 'Authorization': 'key=AAAAhaDytwk:APA91bGLIVdeWNocYSj_zm6dHAQ4cSmXBRR9xdolqe5ENgjbmaSRv_F2GraNpHNP-tIlvFSd5S6OuiiYqbNa0-cHfAjnEpaUjb_heDvcbW7TWrRD6kqccPALnaLsR4mkXIHHPyaOoXWe'}
+				token_owner=getFCMData(db,friend)[0]
+				d={'to': token_owner, 
+				'priority': 10,
+				"data" : {
+			      "Message" : "FoundRide",
+			      "Name" : rider_name,
+			      "Owner" : friend,
+			      "Rider" : person_id 
 
-			for route in friend_route_list:
-				route_dict=route.values()[0]
-				print route_dict["name"]
-				print "The route dict is ",route_dict
-				if(isRouteCompatible(route_dict["source_cords"],route_dict["destination_cords"],source_cordsy,destination_cordsy)):
-					print "Route Matched"+route_dict["name"]
-					print friend 
-					return friend
+			    }}
+				notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
+				print notif_request.text	
 
-				else:
-					continue
 
-		
-		
 	except Exception as e:
 		print "Exception in findMatchingRoute :",e
 		return None
+
+
 
 ########################## Task to send out general notifications ####################
 ####################### Sending out notification to the rider for confirmation or to both owner and rider that the trip has been booked ###########
@@ -188,11 +200,22 @@ def postNotifications(owner,rider,notifType):
 
 	if(notifType=="confirmAwait"):
 		####### Send notification to the rider ############
-		token=getFCMToken(db,rider)
-		d={'to': token, 
+		fcm_list_rider=getFCMData(db,rider)
+		token_rider=fcm_list[0]
+		name_rider=fcm_list[1]
+
+		fcm_list_owner=getFCMData(db,owner)
+		token_owner=fcm_list[0]
+		name_owner=fcm_list[1]
+
+		d={'to': token_rider, 
 			'priority': 10,
 			"data" : {
-		      "Message" : "Foundride", 
+		      "Message" : "FoundRide",
+		      "Name" : name_owner,
+		      "Owner" : owner,
+		      "Rider" : rider 
+
 		    }}
 		notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
 		print notif_request.text
@@ -202,23 +225,33 @@ def postNotifications(owner,rider,notifType):
 		###### send notifications to owner and rider ############
 		##### First send to owner
 
-		token=getFCMToken(db,owner)
-		d={'to': token
+		fcm_list_rider=getFCMData(db,rider)
+		token_rider=fcm_list[0]
+		name_rider=fcm_list[1]
+
+		fcm_list_owner=getFCMData(db,owner)
+		token_owner=fcm_list[0]
+		name_owner=fcm_list[1]
+
+		d={'to': token_rider
 		, 'priority': 10,
 			"data" : {
 		      "Message" : "ConfirmedRide",
-		      
-		      
+		      "Name":name_owner,
+		      "Owner" : owner,
+		      "Rider" : rider 
 		    }}
 		notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
 		
-		token=getFCMToken(db,rider)
-		d={'to': token
+		
+
+		d={'to': token_owner
 		, 'priority': 10,
 			"data" : {
 		      "Message" : "ConfirmedRide",
-		      
-		      
+		      "Name" : name_rider,
+		      "Owner" : owner,
+		      "Rider" : rider 
 		    }}
 		notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
 	
@@ -226,7 +259,7 @@ def postNotifications(owner,rider,notifType):
 
 
 ################ function to get the FCM Token from firebase given we have the user id ###########
-def getFCMToken(firebaseDbInstance,personId):
+def getFCMData(firebaseDbInstance,personId):
 	################ retrieve the person's token from firebase ##############
 	import json
 	user_ref=firebaseDbInstance.reference("Users")
@@ -234,5 +267,6 @@ def getFCMToken(firebaseDbInstance,personId):
 	person=json.dumps(user_ref.order_by_key().equal_to(personId).get())
 	person=json.loads(person)
 	token=person.values()[0]["token"]
-	return token
+	name=person.values()[0]["name"]
+	return (token,name)
 	

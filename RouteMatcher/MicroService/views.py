@@ -12,13 +12,12 @@ def check(request):
 ######################## Endpoint for route matching #####################################
 def matchTrip(request):
 	### Retrieve the get parameters ################
-	owner=request.GET.get("Owner")
-	rider=request.GET.get("Rider")
+	person_id=request.GET.get("personId")
 	### The variable below indicates whether the  request for matching the route came from a ride host or rider ############
 	initiator=request.GET.get("Initiator")
 
 	################ invoke Celery task to start matching Trips and routes #########
-	checkPath.delay(owner,rider,initiator)
+	checkPath.delay(person_id,initiator)
 	return HttpResponse(owner+rider+initiator)
 
 
