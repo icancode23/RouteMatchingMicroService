@@ -18,7 +18,7 @@ def matchTrip(request):
 	initiator=request.GET.get("Initiator")
 
 	################ invoke Celery task to start matching Trips and routes #########
-	#checkPath.delay(owner,rider,initiator)
+	checkPath.delay(owner,rider,initiator)
 	return HttpResponse(owner+rider+initiator)
 
 
