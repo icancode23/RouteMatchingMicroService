@@ -10,7 +10,7 @@ def check(request):
 	return HttpResponse("Yes this works")
 
 ######################## Endpoint for route matching #####################################
-def matchRoute(request):
+def matchTrip(request):
 	### Retrieve the get parameters ################
 	owner=request.GET.get("Owner")
 	rider=request.GET.get("Rider")
