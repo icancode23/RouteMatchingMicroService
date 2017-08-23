@@ -3,12 +3,26 @@ from MicroService.tasks import checkPath,postNotifications
 from django.http import HttpResponse 
 
 # Create your views here.
-## test function 
+
+## Test Endpoint
 def check(request):
 	checkPath.delay()
 	return HttpResponse("Yes this works")
 
-## Function To send notifications to clients 
+######################## Endpoint for route matching #####################################
+def matchRoute(request):
+	### Retrieve the get parameters ################
+	owner=request.GET.get("Owner")
+	rider=request.GET.get("Rider")
+	### The variable below indicates whether the  request for matching the route came from a ride host or rider ############
+	initiator=request.GET.get("Initiator")
+
+	################ invoke Celery task to start matching Trips and routes #########
+	#checkPath.delay(owner,rider,initiator)
+	return HttpResponse(owner+rider+initiator)
+
+
+## Endpoint To send notifications to clients 
 def sendNotifications(request):
 	## retrieve the get parameters
 	owner=request.GET.get("Owner")
@@ -19,5 +33,4 @@ def sendNotifications(request):
 	postNotifications.delay(owner,rider,notifType)
 
 	return HttpResponse("{Status:OK}")
-
 
