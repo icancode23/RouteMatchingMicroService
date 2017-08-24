@@ -118,6 +118,8 @@ def matchTripOwner(db,person_id,isRouteCompatible):
 		
 		
 	except Exception as e:
+		import traceback
+		traceback.print_exc()
 		print "Exception in findMatchingRoute :",e
 		return None
 
@@ -178,6 +180,8 @@ def matchTripRider(db,person_id,isRouteCompatible):
 
 
 	except Exception as e:
+		import traceback
+		traceback.print_exc()
 		print "Exception in findMatchingRoute :",e
 		return None
 
