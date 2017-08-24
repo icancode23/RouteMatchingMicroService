@@ -213,12 +213,12 @@ def postNotifications(owner,rider,notifType):
 	if(notifType=="confirmAwait"):
 		####### Send notification to the rider ############
 		fcm_list_rider=getFCMData(db,rider)
-		token_rider=fcm_list[0]
-		name_rider=fcm_list[1]
+		token_rider=fcm_list_rider[0]
+		name_rider=fcm_list_rider[1]
 
 		fcm_list_owner=getFCMData(db,owner)
-		token_owner=fcm_list[0]
-		name_owner=fcm_list[1]
+		token_owner=fcm_list_owner[0]
+		name_owner=fcm_list_owner[1]
 
 		d={'to': token_rider, 
 			'priority': 10,
@@ -238,12 +238,12 @@ def postNotifications(owner,rider,notifType):
 		##### First send to owner
 
 		fcm_list_rider=getFCMData(db,rider)
-		token_rider=fcm_list[0]
-		name_rider=fcm_list[1]
+		token_rider=fcm_list_rider[0]
+		name_rider=fcm_list_rider[1]
 
 		fcm_list_owner=getFCMData(db,owner)
-		token_owner=fcm_list[0]
-		name_owner=fcm_list[1]
+		token_owner=fcm_list_owner[0]
+		name_owner=fcm_list_owner[1]
 
 		d={'to': token_rider
 		, 'priority': 10,
