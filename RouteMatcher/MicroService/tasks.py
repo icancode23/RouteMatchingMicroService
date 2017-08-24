@@ -49,7 +49,8 @@ def checkPath(person_id,initiator):
 
 ########################### Function to match trips if the initiator is the owner itself ###############
 def matchTripOwner(db,person_id,isRouteCompatible):	
-
+	import json 
+	
 	friend_ref = db.reference('Friends')
 	route_ref=db.reference("Routes")
 	user_ref=db.reference("Users")
