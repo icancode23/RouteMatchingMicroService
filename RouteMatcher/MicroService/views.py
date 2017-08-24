@@ -18,7 +18,7 @@ def matchTrip(request):
 
 	################ invoke Celery task to start matching Trips and routes #########
 	checkPath.delay(person_id,initiator)
-	return HttpResponse(owner+rider+initiator)
+	return HttpResponse("{Status:OK}")
 
 
 ## Endpoint To send notifications to clients 
