@@ -174,6 +174,8 @@ def matchTripRider(db,person_id,isRouteCompatible):
 				      "Name" : rider_name,
 				      "Owner" : friend,
 				      "Rider" : person_id 
+				      "RiderStart":friend_trip["source_name"],
+				      "RiderDrop":friend_trip["destination_name"]
 
 				    }}
 					notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
@@ -181,7 +183,7 @@ def matchTripRider(db,person_id,isRouteCompatible):
 
 			else:
 				continue
-					
+
 
 
 	except Exception as e:
