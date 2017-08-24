@@ -50,7 +50,7 @@ def checkPath(person_id,initiator):
 ########################### Function to match trips if the initiator is the owner itself ###############
 def matchTripOwner(db,person_id,isRouteCompatible):	
 	import json 
-	
+
 	friend_ref = db.reference('Friends')
 	route_ref=db.reference("Routes")
 	user_ref=db.reference("Users")
@@ -73,7 +73,6 @@ def matchTripOwner(db,person_id,isRouteCompatible):
 	user_friends=[]
 
 	try:
-		import json
 		######## Querying for the list of all friends##############
 		user_friends_dict=json.dumps(friend_ref.order_by_key().equal_to(user_name).get())
 		user_friends_dict=json.loads(user_friends_dict)
@@ -126,6 +125,8 @@ def matchTripOwner(db,person_id,isRouteCompatible):
 ########################### Function to match trips if the initiator is the owner itself ###############
 def matchTripRider(db,person_id,isRouteCompatible):
 
+	import json
+
 	friend_ref = db.reference('Friends')
 	route_ref=db.reference("Routes")
 	user_ref=db.reference("Users")
@@ -148,7 +149,6 @@ def matchTripRider(db,person_id,isRouteCompatible):
 	user_friends=[]
 
 	try:
-		import json
 		######## Querying for the list of all friends##############
 		user_friends_dict=json.dumps(friend_ref.order_by_key().equal_to(user_name).get())
 		user_friends_dict=json.loads(user_friends_dict)
