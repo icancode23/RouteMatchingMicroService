@@ -173,7 +173,7 @@ def matchTripRider(db,person_id,isRouteCompatible):
 				      "Message" : "FoundRide",
 				      "Name" : rider_name,
 				      "Owner" : friend,
-				      "Rider" : person_id 
+				      "Rider" : person_id,
 				      "RiderStart":friend_trip["source_name"],
 				      "RiderDrop":friend_trip["destination_name"]
 
