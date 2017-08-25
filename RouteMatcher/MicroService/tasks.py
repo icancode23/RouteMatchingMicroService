@@ -82,23 +82,29 @@ def matchTripOwner(db,person_id,isRouteCompatible):
 			friend_trip={}
 			friend_trip=temp_trip_ref.child(friend).get()
 			################ Check whether the trip matches or not ##############
-			if(isRouteCompatible(owner_source_cords,owner_destination_cords,friend_trip["source_cords"],friend_trip["destination_cords"])):
-				######### Match Found Indicate the owner who was the initiatior ########################
-				### Code snippet to send Notifications
-				import requests
-				head={'project_id': 'kute-ec351', 'Content-Type': 'application/json', 'Authorization': 'key=AAAAhaDytwk:APA91bGLIVdeWNocYSj_zm6dHAQ4cSmXBRR9xdolqe5ENgjbmaSRv_F2GraNpHNP-tIlvFSd5S6OuiiYqbNa0-cHfAjnEpaUjb_heDvcbW7TWrRD6kqccPALnaLsR4mkXIHHPyaOoXWe'}
-				token_owner=getFCMData(db,person_id)[0]
-				d={'to': token_owner, 
-				'priority': 10,
-				"data" : {
-			      "Message" : "FoundRide",
-			      "Name" : getFCMData(db,friend)[1],
-			      "Owner" : person_id,
-			      "Rider" : friend 
+			if(friend_trip != None):
+				if(isRouteCompatible(owner_source_cords,owner_destination_cords,friend_trip["source_cords"],friend_trip["destination_cords"])):
+					######### Match Found Indicate the owner who was the initiatior ########################
+					### Code snippet to send Notifications
+					import requests
+					head={'project_id': 'kute-ec351', 'Content-Type': 'application/json', 'Authorization': 'key=AAAAhaDytwk:APA91bGLIVdeWNocYSj_zm6dHAQ4cSmXBRR9xdolqe5ENgjbmaSRv_F2GraNpHNP-tIlvFSd5S6OuiiYqbNa0-cHfAjnEpaUjb_heDvcbW7TWrRD6kqccPALnaLsR4mkXIHHPyaOoXWe'}
+					token_owner=getFCMData(db,person_id)[0]
+					d={'to': token_owner, 
+					'priority': 10,
+					"data" : {
+				      "Message" : "FoundRide",
+				      "Name" : getFCMData(db,friend)[1],
+				      "Owner" : person_id,
+				      "Rider" : friend,
+				      "RiderStart" : friend_trip["source_name"],
+				      "RiderDrop" : friend_trip["destination_name"]
 
-			    }}
-				notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
-				print notif_request.text	
+				    }}
+					notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
+					print notif_request.text
+
+			else:
+				continue	
 
 		################ Query For Friend Multiple trips or routes ############
 		
@@ -227,7 +233,6 @@ def postNotifications(owner,rider,notifType):
 		      "Name" : name_owner,
 		      "Owner" : owner,
 		      "Rider" : rider 
-
 		    }}
 		notif_request=requests.post(url='https://fcm.googleapis.com/fcm/send',headers=head,data=json.dumps(d))
 		print notif_request.text
