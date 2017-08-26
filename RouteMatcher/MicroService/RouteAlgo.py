@@ -34,12 +34,12 @@ def isRouteCompatible(source_owner,destination_owner,source_rider,destination_ri
 				prev=cord
 
 			elif((vincenty(cord,cord2).miles * 1.6) <0.1):
-			matched_points.append(cord)
-			print cord
-			if(prev!=None):
-				dist +=  vincenty(prev,cord).miles * 1.6
+				matched_points.append(cord)
+				print cord
+				if(prev!=None):
+					dist +=  vincenty(prev,cord).miles * 1.6
 
-			prev=cord
+				prev=cord
 
 
 	####### Calculating the offset from the first and last point #############
