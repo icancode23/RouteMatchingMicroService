@@ -9,5 +9,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url (r'^check$','MicroService.views.check',name="Check"),
     url (r'^sendNotification$','MicroService.views.sendNotifications',name="sendNotifications"),
-    url (r'^matchTrip$','MicroService.views.matchTrip',name="matchTrip")
+    url (r'^matchTrip$','MicroService.views.matchTrip',name="matchTrip"),
+    url (r'^trackShipment','MicroService.views.trackShipment',name="tracker")
 )
