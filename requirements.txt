@@ -29,7 +29,7 @@ pyasn1==0.3.2
 pyasn1-modules==0.0.11
 pytz==2017.2
 requests==2.18.4
-rsa==3.4.2
+rsa==4.1
 singledispatch==3.4.0.3
 six==1.10.0
 supervisor==3.3.3
